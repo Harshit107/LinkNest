@@ -1,7 +1,7 @@
 import { X } from 'lucide-react';
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { BORDER_RADIUS, COLORS, SHADOWS, SPACING } from '../../constants/ui.constants';
+import { BORDER_RADIUS, SHADOWS, SPACING } from '../../constants/ui.constants';
 
 interface AddWebsiteModalProps {
   isOpen: boolean;
@@ -25,7 +25,7 @@ const Overlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: ${COLORS.overlay};
+  background-color: ${({ theme }) => theme.overlay};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,7 +34,7 @@ const Overlay = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  background-color: ${COLORS.surface};
+  background-color: ${({ theme }) => theme.surface};
   width: 100%;
   max-width: 400px;
   border-radius: ${BORDER_RADIUS.lg};
@@ -54,19 +54,19 @@ const Header = styled.div`
 const Title = styled.h2`
   font-size: 1.25rem;
   font-weight: 600;
-  color: ${COLORS.text.primary};
+  color: ${({ theme }) => theme.text.primary};
 `;
 
 const CloseButton = styled.button`
   background: none;
   border: none;
-  color: ${COLORS.text.secondary};
+  color: ${({ theme }) => theme.text.secondary};
   padding: 4px;
   border-radius: 50%;
   display: flex;
   &:hover {
-    background-color: ${COLORS.background};
-    color: ${COLORS.text.primary};
+    background-color: ${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.text.primary};
   }
 `;
 
@@ -85,25 +85,27 @@ const FormGroup = styled.div`
 const Label = styled.label`
   font-size: 0.9rem;
   font-weight: 500;
-  color: ${COLORS.text.secondary};
+  color: ${({ theme }) => theme.text.secondary};
 `;
 
 const Input = styled.input`
   padding: ${SPACING.sm};
-  border: 1px solid ${COLORS.border};
+  border: 1px solid ${({ theme }) => theme.border};
   border-radius: ${BORDER_RADIUS.md};
   font-size: 1rem;
   outline: none;
   transition: border-color 0.2s;
+  background-color: ${({ theme }) => theme.surface};
+  color: ${({ theme }) => theme.text.primary};
 
   &:focus {
-    border-color: ${COLORS.primary};
+    border-color: ${({ theme }) => theme.primary};
   }
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  background-color: ${COLORS.surface};
+  background-color: ${({ theme }) => theme.surface};
   padding-top: ${SPACING.md};
   justify-content: flex-end;
   gap: ${SPACING.sm};
@@ -115,11 +117,11 @@ const Button = styled.button<{ $variant?: 'primary' | 'secondary' }>`
   font-weight: 500;
   border: none;
   
-  background-color: ${(props) => props.$variant === 'primary' ? COLORS.primary : COLORS.background};
-  color: ${(props) => props.$variant === 'primary' ? 'white' : COLORS.text.primary};
+  background-color: ${(props) => props.$variant === 'primary' ? props.theme.primary : props.theme.background};
+  color: ${(props) => props.$variant === 'primary' ? 'white' : props.theme.text.primary};
 
   &:hover {
-    background-color: ${(props) => props.$variant === 'primary' ? COLORS.primaryHover : '#e2e8f0'};
+    background-color: ${(props) => props.$variant === 'primary' ? props.theme.primaryHover : props.theme.border};
   }
 
   &:disabled {

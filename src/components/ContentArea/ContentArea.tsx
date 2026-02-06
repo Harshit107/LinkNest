@@ -1,10 +1,11 @@
 import { Plus } from 'lucide-react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { BORDER_RADIUS, COLORS, SPACING } from '../../constants/ui.constants';
+import { BORDER_RADIUS, SPACING } from '../../constants/ui.constants';
 import { useFolders } from '../../hooks/useFolders';
 import { useWebsites } from '../../hooks/useWebsites';
 import { AddWebsiteModal } from '../Modals/AddWebsiteModal';
+import { ConfirmationModal } from '../Modals/ConfirmationModal';
 import { WebsiteCard } from '../WebsiteCard/WebsiteCard';
 
 interface ContentAreaProps {
@@ -26,7 +27,7 @@ const ContentHeader = styled.div`
 const FolderTitle = styled.h1`
   font-size: 1.5rem;
   font-weight: 700;
-  color: ${COLORS.text.primary};
+  color: ${({ theme }) => theme.text.primary};
 `;
 
 const HeaderActions = styled.div`
@@ -38,7 +39,7 @@ const AddButton = styled.button`
   display: flex;
   align-items: center;
   gap: ${SPACING.xs};
-  background-color: ${COLORS.primary};
+  background-color: ${({ theme }) => theme.primary};
   color: white;
   border: none;
   padding: ${SPACING.sm} ${SPACING.md};
@@ -47,7 +48,7 @@ const AddButton = styled.button`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: ${COLORS.primaryHover};
+    background-color: ${({ theme }) => theme.primaryHover};
   }
 `;
 
@@ -61,20 +62,20 @@ const LoadingState = styled.div`
   display: flex;
   justify-content: center;
   padding: ${SPACING.xl};
-  color: ${COLORS.text.muted};
+  color: ${({ theme }) => theme.text.muted};
 `;
 
 const EmptyState = styled.div`
   text-align: center;
   padding: ${SPACING.xxl};
-  background-color: ${COLORS.surface};
+  background-color: ${({ theme }) => theme.surface};
   border-radius: ${BORDER_RADIUS.lg};
-  border: 1px dashed ${COLORS.border};
-  color: ${COLORS.text.secondary};
+  border: 1px dashed ${({ theme }) => theme.border};
+  color: ${({ theme }) => theme.text.secondary};
 
   h3 {
     margin-bottom: ${SPACING.sm};
-    color: ${COLORS.text.primary};
+    color: ${({ theme }) => theme.text.primary};
   }
 
   p {
@@ -83,14 +84,26 @@ const EmptyState = styled.div`
 `;
 
 export const ContentArea: React.FC<ContentAreaProps> = ({ folderId }) => {
-  const { websites, isLoading, addWebsite } = useWebsites(folderId);
+  const { websites, isLoading, addWebsite, deleteWebsite } = useWebsites(folderId);
   const { folders } = useFolders();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deletingWebsiteId, setDeletingWebsiteId] = useState<string | null>(null);
 
   const currentFolder = folders.find(f => f.id === folderId);
 
   const handleAddWebsite = async (data: { title: string; url: string }) => {
     await addWebsite({ ...data, folderId });
+  };
+
+  const handleDeleteRequest = (id: string) => {
+    setDeletingWebsiteId(id);
+  };
+
+  const confirmDelete = async () => {
+    if (deletingWebsiteId) {
+      await deleteWebsite(deletingWebsiteId);
+      setDeletingWebsiteId(null);
+    }
   };
 
   if (isLoading) return <LoadingState>Loading websites...</LoadingState>;
@@ -117,7 +130,11 @@ export const ContentArea: React.FC<ContentAreaProps> = ({ folderId }) => {
       ) : (
         <Grid>
           {websites.map(site => (
-            <WebsiteCard key={site.id} website={site} />
+            <WebsiteCard 
+              key={site.id} 
+              website={site} 
+              onDelete={handleDeleteRequest}
+            />
           ))}
         </Grid>
       )}
@@ -126,6 +143,16 @@ export const ContentArea: React.FC<ContentAreaProps> = ({ folderId }) => {
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
         onSubmit={handleAddWebsite}
+      />
+
+      <ConfirmationModal
+        isOpen={!!deletingWebsiteId}
+        onClose={() => setDeletingWebsiteId(null)}
+        onConfirm={confirmDelete}
+        title="Delete Website"
+        message="Are you sure you want to delete this website? This action cannot be undone."
+        confirmText="Delete"
+        isDestructive
       />
     </Container>
   );

@@ -3,12 +3,11 @@ import styled from 'styled-components';
 import { ContentArea } from '../components/ContentArea/ContentArea';
 import { Header } from '../components/Header/Header';
 import { Sidebar } from '../components/Sidebar/Sidebar';
-import { COLORS } from '../constants/ui.constants';
 
-// We'll import ContentArea later
 const MainContainer = styled.div`
   min-height: 100vh;
-  background-color: ${COLORS.background};
+  background-color: ${({ theme }) => theme.background};
+  transition: background-color 0.3s ease;
 `;
 
 const LayoutWrapper = styled.div`
@@ -29,7 +28,7 @@ const Placeholder = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: ${COLORS.text.muted};
+  color: ${({ theme }) => theme.text.muted};
   font-size: 1.1rem;
 `;
 

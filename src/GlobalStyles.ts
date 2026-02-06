@@ -1,5 +1,4 @@
 import { createGlobalStyle } from 'styled-components';
-import { COLORS } from './constants/ui.constants';
 
 export const GlobalStyles = createGlobalStyle`
   * {
@@ -10,12 +9,13 @@ export const GlobalStyles = createGlobalStyle`
 
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: ${COLORS.background};
-    color: ${COLORS.text.primary};
+    background-color: ${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.text.primary};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     height: 100vh;
     overflow: hidden; /* Single page app constraint */
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   button {
@@ -39,11 +39,11 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-thumb {
-    background: ${COLORS.text.muted};
+    background: ${({ theme }) => theme.text.muted};
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: ${COLORS.text.secondary};
+    background: ${({ theme }) => theme.text.secondary};
   }
 `;

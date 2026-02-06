@@ -1,7 +1,7 @@
 import { Plus } from 'lucide-react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { BORDER_RADIUS, COLORS, SPACING } from '../../constants/ui.constants';
+import { BORDER_RADIUS, SPACING } from '../../constants/ui.constants';
 import { useFolders } from '../../hooks/useFolders';
 import { FolderList } from '../FolderList/FolderList';
 
@@ -12,8 +12,8 @@ interface SidebarProps {
 
 const SidebarContainer = styled.aside`
   width: 260px;
-  background-color: ${COLORS.surface};
-  border-right: 1px solid ${COLORS.border};
+  background-color: ${({ theme }) => theme.surface};
+  border-right: 1px solid ${({ theme }) => theme.border};
   display: flex;
   flex-direction: column;
   height: calc(100vh - 64px); /* Subtract header height */
@@ -21,6 +21,8 @@ const SidebarContainer = styled.aside`
   top: 64px;
   left: 0;
   padding: ${SPACING.lg};
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  z-index: 5;
 `;
 
 const SidebarHeader = styled.div`
@@ -30,13 +32,13 @@ const SidebarHeader = styled.div`
 const SidebarTitle = styled.h2`
   font-size: 1rem;
   font-weight: 600;
-  color: ${COLORS.text.primary};
+  color: ${({ theme }) => theme.text.primary};
   margin-bottom: ${SPACING.xs};
 `;
 
 const SidebarDescription = styled.p`
   font-size: 0.8rem;
-  color: ${COLORS.text.muted};
+  color: ${({ theme }) => theme.text.muted};
 `;
 
 const ScrollArea = styled.div`
@@ -47,7 +49,7 @@ const ScrollArea = styled.div`
 const Footer = styled.div`
   margin-top: auto;
   padding-top: ${SPACING.md};
-  border-top: 1px solid ${COLORS.border};
+  border-top: 1px solid ${({ theme }) => theme.border};
 `;
 
 const NewFolderButton = styled.button`
@@ -57,25 +59,27 @@ const NewFolderButton = styled.button`
   justify-content: center;
   gap: ${SPACING.sm};
   padding: ${SPACING.sm};
-  background-color: ${COLORS.background};
-  border: 1px dashed ${COLORS.border};
+  background-color: ${({ theme }) => theme.background};
+  border: 1px dashed ${({ theme }) => theme.border};
   border-radius: ${BORDER_RADIUS.md};
-  color: ${COLORS.primary};
+  color: ${({ theme }) => theme.primary};
   font-weight: 500;
   transition: all 0.2s;
 
   &:hover {
-    background-color: #eff6ff;
-    border-color: ${COLORS.primary};
+    background-color: ${({ theme }) => theme.text.secondary}10; /* slight tint */
+    border-color: ${({ theme }) => theme.primary};
   }
 `;
 
 const NewFolderInput = styled.input`
   width: 100%;
   padding: ${SPACING.sm};
-  border: 1px solid ${COLORS.primary};
+  border: 1px solid ${({ theme }) => theme.primary};
   border-radius: ${BORDER_RADIUS.md};
   outline: none;
+  background-color: ${({ theme }) => theme.background};
+  color: ${({ theme }) => theme.text.primary};
 `;
 
 export const Sidebar: React.FC<SidebarProps> = ({ selectedFolderId, onSelectFolder }) => {

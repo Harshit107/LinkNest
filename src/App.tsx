@@ -2,6 +2,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { GlobalStyles } from './GlobalStyles';
 import Dashboard from './pages/Dashboard';
 
+import { ThemeContextProvider } from './context/ThemeContext';
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -14,8 +16,10 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <GlobalStyles />
-      <Dashboard />
+      <ThemeContextProvider>
+        <GlobalStyles />
+        <Dashboard />
+      </ThemeContextProvider>
     </QueryClientProvider>
   );
 }

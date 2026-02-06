@@ -33,3 +33,14 @@ export const addWebsite = async (website: Omit<Website, 'id' | 'createdAt'>): Pr
     }, LATENCY);
   });
 };
+
+export const deleteWebsite = async (id: string): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      websites = websites.filter((w) => w.id !== id);
+      resolve();
+    }, LATENCY);
+  });
+};
+
+

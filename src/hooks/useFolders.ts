@@ -20,8 +20,6 @@ export const useFolders = () => {
     mutationFn: (id: string) => deleteFolder(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['folders'] });
-      // Also strictly need to handle websites associated with this folder, 
-      // but for this mock level we just delete the folder.
     },
   });
 

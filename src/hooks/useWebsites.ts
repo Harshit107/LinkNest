@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addWebsite, fetchWebsites } from '../api';
+import { addWebsite, deleteWebsite, fetchWebsites } from '../api';
 
 export const useWebsites = (folderId: string | null) => {
   const queryClient = useQueryClient();
@@ -17,10 +17,19 @@ export const useWebsites = (folderId: string | null) => {
     },
   });
 
+  const deleteWebsiteMutation = useMutation({
+    mutationFn: (id: string) => deleteWebsite(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['websites'] });
+    },
+  });
+
   return {
     websites: websitesQuery.data || [],
     isLoading: websitesQuery.isLoading,
     addWebsite: addWebsiteMutation.mutateAsync,
     isAdding: addWebsiteMutation.isPending,
+    deleteWebsite: deleteWebsiteMutation.mutateAsync,
+    isDeleting: deleteWebsiteMutation.isPending,
   };
 };
